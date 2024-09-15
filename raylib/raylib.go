@@ -667,6 +667,64 @@ func NewRectangle(x, y, width, height float32) Rectangle {
 	return Rectangle{x, y, width, height}
 }
 
+// NewRectangleV - Returns new Rectangle (vector version)
+func NewRectangleV(position, size Vector2) Rectangle {
+	return Rectangle{position.X, position.Y, size.X, size.Y}
+}
+
+// NewRectangleCorners - Returns new Rectangle from any 2 opposite corners
+func NewRectangleCorners(c1, c2 Vector2) Rectangle {
+	pos := Vector2Min(c1, c2)
+	size := Vector2Abs(Vector2Subtract(c1, c2))
+	return Rectangle{
+		X:      pos.X,
+		Y:      pos.Y,
+		Width:  size.X,
+		Height: size.Y,
+	}
+}
+
+// Position - Returns the position of rectangle (Vector2{X, Y}, same as [Rectangle.TopLeft])
+func (r Rectangle) Position() Vector2 { return Vector2{r.X, r.Y} }
+
+// Size - Returns the size of rectangle (Vector2{Width, Height})
+func (r Rectangle) Size() Vector2 { return Vector2{r.Width, r.Height} }
+
+// TopLeft - Returns top-left corner position of rectangle (same as [Rectangle.Position])
+func (r Rectangle) TopLeft() Vector2 { return Vector2{r.X, r.Y} }
+
+// TopRight - Returns top-right corner position of rectangle
+func (r Rectangle) TopRight() Vector2 { return Vector2{r.X + r.Width, r.Y} }
+
+// BottomLeft - Returns bottom-left corner position of rectangle
+func (r Rectangle) BottomLeft() Vector2 { return Vector2{r.X, r.Y + r.Height} }
+
+// BottomRight - Returns bottom-right corner position of rectangle
+func (r Rectangle) BottomRight() Vector2 { return Vector2{r.X + r.Width, r.Y + r.Height} }
+
+// Center - Returns center position of rectangle
+func (r Rectangle) Center() Vector2 { return Vector2{r.X + r.Width/2, r.Y + r.Height/2} }
+
+// CheckCollisionRec - Check collision between two rectangles
+func (rec1 Rectangle) CheckCollisionRec(rec2 Rectangle) bool {
+	return CheckCollisionRecs(rec1, rec2)
+}
+
+// CheckCollisionPoint - Check if point is inside rectangle
+func (rec Rectangle) CheckCollisionPoint(point Vector2) bool {
+	return CheckCollisionPointRec(point, rec)
+}
+
+// CheckCollisionCircle - Check collision between circle and rectangle
+func (rec Rectangle) CheckCollisionCircle(center Vector2, radius float32) bool {
+	return CheckCollisionCircleRec(center, radius, rec)
+}
+
+// GetCollisionRec - Get collision rectangle for two rectangles collision
+func (rec1 Rectangle) GetCollisionRec(rec2 Rectangle) Rectangle {
+	return GetCollisionRec(rec1, rec2)
+}
+
 // ToInt32 converts rectangle to int32 variant
 func (r *Rectangle) ToInt32() RectangleInt32 {
 	rect := RectangleInt32{}
