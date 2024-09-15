@@ -143,10 +143,10 @@ func Vector2Normalize(v Vector2) Vector2 {
 
 // Vector2Transform - Transforms a Vector2 by a given Matrix
 func Vector2Transform(v Vector2, mat Matrix) Vector2 {
-	var result = Vector2{}
+	result := Vector2{}
 
-	var x = v.X
-	var y = v.Y
+	x := v.X
+	y := v.Y
 	var z float32
 
 	result.X = mat.M0*x + mat.M4*y + mat.M8*z + mat.M12
@@ -162,7 +162,7 @@ func Vector2Lerp(v1, v2 Vector2, amount float32) Vector2 {
 
 // Vector2Reflect - Calculate reflected vector to normal
 func Vector2Reflect(v Vector2, normal Vector2) Vector2 {
-	var result = Vector2{}
+	result := Vector2{}
 
 	dotProduct := v.X*normal.X + v.Y*normal.Y // Dot product
 
@@ -172,9 +172,25 @@ func Vector2Reflect(v Vector2, normal Vector2) Vector2 {
 	return result
 }
 
+// Vector2Min - Get min value for each pair of components
+func Vector2Min(v1 Vector2, v2 Vector2) Vector2 {
+	return NewVector2(
+		float32(math.Min(float64(v1.X), float64(v2.X))),
+		float32(math.Min(float64(v1.Y), float64(v2.Y))),
+	)
+}
+
+// Vector2Max - Get max value for each pair of components
+func Vector2Max(v1 Vector2, v2 Vector2) Vector2 {
+	return NewVector2(
+		float32(math.Max(float64(v1.X), float64(v2.X))),
+		float32(math.Max(float64(v1.Y), float64(v2.Y))),
+	)
+}
+
 // Vector2Rotate - Rotate vector by angle
 func Vector2Rotate(v Vector2, angle float32) Vector2 {
-	var result = Vector2{}
+	result := Vector2{}
 
 	cosres := float32(math.Cos(float64(angle)))
 	sinres := float32(math.Sin(float64(angle)))
@@ -187,7 +203,7 @@ func Vector2Rotate(v Vector2, angle float32) Vector2 {
 
 // Vector2MoveTowards - Move Vector towards target
 func Vector2MoveTowards(v Vector2, target Vector2, maxDistance float32) Vector2 {
-	var result = Vector2{}
+	result := Vector2{}
 
 	dx := target.X - v.X
 	dy := target.Y - v.Y
@@ -212,7 +228,7 @@ func Vector2Invert(v Vector2) Vector2 {
 
 // Vector2Clamp - Clamp the components of the vector between min and max values specified by the given vectors
 func Vector2Clamp(v Vector2, min Vector2, max Vector2) Vector2 {
-	var result = Vector2{}
+	result := Vector2{}
 
 	result.X = float32(math.Min(float64(max.X), math.Max(float64(min.X), float64(v.X))))
 	result.Y = float32(math.Min(float64(max.Y), math.Max(float64(min.Y), float64(v.Y))))
@@ -222,7 +238,7 @@ func Vector2Clamp(v Vector2, min Vector2, max Vector2) Vector2 {
 
 // Vector2ClampValue - Clamp the magnitude of the vector between two min and max values
 func Vector2ClampValue(v Vector2, min float32, max float32) Vector2 {
-	var result = v
+	result := v
 
 	length := v.X*v.X + v.Y*v.Y
 	if length > 0.0 {
@@ -261,6 +277,11 @@ func Vector2Cross(value float32, vector Vector2) Vector2 {
 // Vector2LenSqr - Returns the len square root of a vector
 func Vector2LenSqr(vector Vector2) float32 {
 	return vector.X*vector.X + vector.Y*vector.Y
+}
+
+// Vector2Abs - Returns the absolute value of each component
+func Vector2Abs(v Vector2) Vector2 {
+	return NewVector2(float32(math.Abs(float64(v.X))), float32(math.Abs(float64(v.Y))))
 }
 
 // Vector3Zero - Vector with components value 0.0
@@ -617,10 +638,10 @@ func Vector3Barycenter(p, a, b, c Vector3) Vector3 {
 // Vector3Unproject - Projects a Vector3 from screen space into object space
 // NOTE: We are avoiding calling other raymath functions despite available
 func Vector3Unproject(source Vector3, projection Matrix, view Matrix) Vector3 {
-	var result = Vector3{}
+	result := Vector3{}
 
 	// Calculate unprojected matrix (multiply view matrix by projection matrix) and invert it
-	var matViewProj = Matrix{ // MatrixMultiply(view, projection);
+	matViewProj := Matrix{ // MatrixMultiply(view, projection);
 		M0:  view.M0*projection.M0 + view.M1*projection.M4 + view.M2*projection.M8 + view.M3*projection.M12,
 		M4:  view.M0*projection.M1 + view.M1*projection.M5 + view.M2*projection.M9 + view.M3*projection.M13,
 		M8:  view.M0*projection.M2 + view.M1*projection.M6 + view.M2*projection.M10 + view.M3*projection.M14,
@@ -636,44 +657,45 @@ func Vector3Unproject(source Vector3, projection Matrix, view Matrix) Vector3 {
 		M3:  view.M12*projection.M0 + view.M13*projection.M4 + view.M14*projection.M8 + view.M15*projection.M12,
 		M7:  view.M12*projection.M1 + view.M13*projection.M5 + view.M14*projection.M9 + view.M15*projection.M13,
 		M11: view.M12*projection.M2 + view.M13*projection.M6 + view.M14*projection.M10 + view.M15*projection.M14,
-		M15: view.M12*projection.M3 + view.M13*projection.M7 + view.M14*projection.M11 + view.M15*projection.M15}
+		M15: view.M12*projection.M3 + view.M13*projection.M7 + view.M14*projection.M11 + view.M15*projection.M15,
+	}
 
 	// Calculate inverted matrix -> MatrixInvert(matViewProj);
 	// Cache the matrix values (speed optimization)
-	var a00 = matViewProj.M0
-	var a01 = matViewProj.M1
-	var a02 = matViewProj.M2
-	var a03 = matViewProj.M3
-	var a10 = matViewProj.M4
-	var a11 = matViewProj.M5
-	var a12 = matViewProj.M6
-	var a13 = matViewProj.M7
-	var a20 = matViewProj.M8
-	var a21 = matViewProj.M9
-	var a22 = matViewProj.M10
-	var a23 = matViewProj.M11
-	var a30 = matViewProj.M12
-	var a31 = matViewProj.M13
-	var a32 = matViewProj.M14
-	var a33 = matViewProj.M15
+	a00 := matViewProj.M0
+	a01 := matViewProj.M1
+	a02 := matViewProj.M2
+	a03 := matViewProj.M3
+	a10 := matViewProj.M4
+	a11 := matViewProj.M5
+	a12 := matViewProj.M6
+	a13 := matViewProj.M7
+	a20 := matViewProj.M8
+	a21 := matViewProj.M9
+	a22 := matViewProj.M10
+	a23 := matViewProj.M11
+	a30 := matViewProj.M12
+	a31 := matViewProj.M13
+	a32 := matViewProj.M14
+	a33 := matViewProj.M15
 
-	var b00 = a00*a11 - a01*a10
-	var b01 = a00*a12 - a02*a10
-	var b02 = a00*a13 - a03*a10
-	var b03 = a01*a12 - a02*a11
-	var b04 = a01*a13 - a03*a11
-	var b05 = a02*a13 - a03*a12
-	var b06 = a20*a31 - a21*a30
-	var b07 = a20*a32 - a22*a30
-	var b08 = a20*a33 - a23*a30
-	var b09 = a21*a32 - a22*a31
-	var b10 = a21*a33 - a23*a31
-	var b11 = a22*a33 - a23*a32
+	b00 := a00*a11 - a01*a10
+	b01 := a00*a12 - a02*a10
+	b02 := a00*a13 - a03*a10
+	b03 := a01*a12 - a02*a11
+	b04 := a01*a13 - a03*a11
+	b05 := a02*a13 - a03*a12
+	b06 := a20*a31 - a21*a30
+	b07 := a20*a32 - a22*a30
+	b08 := a20*a33 - a23*a30
+	b09 := a21*a32 - a22*a31
+	b10 := a21*a33 - a23*a31
+	b11 := a22*a33 - a23*a32
 
 	// Calculate the invert determinant (inlined to avoid double-caching)
-	var invDet = 1.0 / (b00*b11 - b01*b10 + b02*b09 + b03*b08 - b04*b07 + b05*b06)
+	invDet := 1.0 / (b00*b11 - b01*b10 + b02*b09 + b03*b08 - b04*b07 + b05*b06)
 
-	var matViewProjInv = Matrix{
+	matViewProjInv := Matrix{
 		M0:  (a11*b11 - a12*b10 + a13*b09) * invDet,
 		M4:  (-a01*b11 + a02*b10 - a03*b09) * invDet,
 		M8:  (a31*b05 - a32*b04 + a33*b03) * invDet,
@@ -689,17 +711,19 @@ func Vector3Unproject(source Vector3, projection Matrix, view Matrix) Vector3 {
 		M3:  (-a10*b09 + a11*b07 - a12*b06) * invDet,
 		M7:  (a00*b09 - a01*b07 + a02*b06) * invDet,
 		M11: (-a30*b03 + a31*b01 - a32*b00) * invDet,
-		M15: (a20*b03 - a21*b01 + a22*b00) * invDet}
+		M15: (a20*b03 - a21*b01 + a22*b00) * invDet,
+	}
 
 	// Create quaternion from source point
-	var quat = Quaternion{X: source.X, Y: source.Y, Z: source.Z, W: 1.0}
+	quat := Quaternion{X: source.X, Y: source.Y, Z: source.Z, W: 1.0}
 
 	// Multiply quat point by unprojecte matrix
-	var qtransformed = Quaternion{ // QuaternionTransform(quat, matViewProjInv)
+	qtransformed := Quaternion{ // QuaternionTransform(quat, matViewProjInv)
 		X: matViewProjInv.M0*quat.X + matViewProjInv.M4*quat.Y + matViewProjInv.M8*quat.Z + matViewProjInv.M12*quat.W,
 		Y: matViewProjInv.M1*quat.X + matViewProjInv.M5*quat.Y + matViewProjInv.M9*quat.Z + matViewProjInv.M13*quat.W,
 		Z: matViewProjInv.M2*quat.X + matViewProjInv.M6*quat.Y + matViewProjInv.M10*quat.Z + matViewProjInv.M14*quat.W,
-		W: matViewProjInv.M3*quat.X + matViewProjInv.M7*quat.Y + matViewProjInv.M11*quat.Z + matViewProjInv.M15*quat.W}
+		W: matViewProjInv.M3*quat.X + matViewProjInv.M7*quat.Y + matViewProjInv.M11*quat.Z + matViewProjInv.M15*quat.W,
+	}
 
 	// Normalized world points in vectors
 	result.X = qtransformed.X / qtransformed.W
@@ -727,7 +751,7 @@ func Vector3Invert(v Vector3) Vector3 {
 
 // Vector3Clamp - Clamp the components of the vector between min and max values specified by the given vectors
 func Vector3Clamp(v Vector3, min Vector3, max Vector3) Vector3 {
-	var result = Vector3{}
+	result := Vector3{}
 
 	result.X = float32(math.Min(float64(max.X), math.Max(float64(min.X), float64(v.X))))
 	result.Y = float32(math.Min(float64(max.Y), math.Max(float64(min.Y), float64(v.Y))))
@@ -738,7 +762,7 @@ func Vector3Clamp(v Vector3, min Vector3, max Vector3) Vector3 {
 
 // Vector3ClampValue - Clamp the magnitude of the vector between two values
 func Vector3ClampValue(v Vector3, min float32, max float32) Vector3 {
-	var result = v
+	result := v
 
 	length := v.X*v.X + v.Y*v.Y + v.Z*v.Z
 	if length > 0.0 {
@@ -773,7 +797,7 @@ func Vector3Equals(p Vector3, q Vector3) bool {
 // n: normalized normal vector of the interface of two optical media
 // r: ratio of the refractive index of the medium from where the ray comes to the refractive index of the medium on the other side of the surface
 func Vector3Refract(v Vector3, n Vector3, r float32) Vector3 {
-	var result = Vector3{}
+	result := Vector3{}
 
 	dot := v.X*n.X + v.Y*n.Y + v.Z*n.Z
 	d := 1.0 - r*r*(1.0-dot*dot)
@@ -1195,14 +1219,14 @@ func MatrixRotateXYZ(ang Vector3) Matrix {
 // MatrixRotateZYX - Get zyx-rotation matrix
 // NOTE: Angle must be provided in radians
 func MatrixRotateZYX(angle Vector3) Matrix {
-	var result = Matrix{}
+	result := Matrix{}
 
-	var cz = float32(math.Cos(float64(angle.Z)))
-	var sz = float32(math.Sin(float64(angle.Z)))
-	var cy = float32(math.Cos(float64(angle.Y)))
-	var sy = float32(math.Sin(float64(angle.Y)))
-	var cx = float32(math.Cos(float64(angle.X)))
-	var sx = float32(math.Sin(float64(angle.X)))
+	cz := float32(math.Cos(float64(angle.Z)))
+	sz := float32(math.Sin(float64(angle.Z)))
+	cy := float32(math.Cos(float64(angle.Y)))
+	sy := float32(math.Sin(float64(angle.Y)))
+	cx := float32(math.Cos(float64(angle.X)))
+	sx := float32(math.Sin(float64(angle.X)))
 
 	result.M0 = cz * cy
 	result.M4 = cz*sy*sx - cx*sz
@@ -1368,35 +1392,35 @@ func MatrixToFloat(mat Matrix) []float32 {
 
 // QuaternionAdd - Add two quaternions
 func QuaternionAdd(q1 Quaternion, q2 Quaternion) Quaternion {
-	var result = Quaternion{X: q1.X + q2.X, Y: q1.Y + q2.Y, Z: q1.Z + q2.Z, W: q1.W + q2.W}
+	result := Quaternion{X: q1.X + q2.X, Y: q1.Y + q2.Y, Z: q1.Z + q2.Z, W: q1.W + q2.W}
 
 	return result
 }
 
 // QuaternionAddValue - Add quaternion and float value
 func QuaternionAddValue(q Quaternion, add float32) Quaternion {
-	var result = Quaternion{X: q.X + add, Y: q.Y + add, Z: q.Z + add, W: q.W + add}
+	result := Quaternion{X: q.X + add, Y: q.Y + add, Z: q.Z + add, W: q.W + add}
 
 	return result
 }
 
 // QuaternionSubtract - Subtract two quaternions
 func QuaternionSubtract(q1 Quaternion, q2 Quaternion) Quaternion {
-	var result = Quaternion{X: q1.X - q2.X, Y: q1.Y - q2.Y, Z: q1.Z - q2.Z, W: q1.W - q2.W}
+	result := Quaternion{X: q1.X - q2.X, Y: q1.Y - q2.Y, Z: q1.Z - q2.Z, W: q1.W - q2.W}
 
 	return result
 }
 
 // QuaternionSubtractValue - Subtract quaternion and float value
 func QuaternionSubtractValue(q Quaternion, sub float32) Quaternion {
-	var result = Quaternion{X: q.X - sub, Y: q.Y - sub, Z: q.Z - sub, W: q.W - sub}
+	result := Quaternion{X: q.X - sub, Y: q.Y - sub, Z: q.Z - sub, W: q.W - sub}
 
 	return result
 }
 
 // QuaternionIdentity - Get identity quaternion
 func QuaternionIdentity() Quaternion {
-	var result = Quaternion{W: 1.0}
+	result := Quaternion{W: 1.0}
 
 	return result
 }
@@ -1464,7 +1488,7 @@ func QuaternionMultiply(q1, q2 Quaternion) Quaternion {
 
 // QuaternionScale - Scale quaternion by float value
 func QuaternionScale(q Quaternion, mul float32) Quaternion {
-	var result = Quaternion{}
+	result := Quaternion{}
 
 	result.X = q.X * mul
 	result.Y = q.Y * mul
@@ -1476,14 +1500,14 @@ func QuaternionScale(q Quaternion, mul float32) Quaternion {
 
 // QuaternionDivide - Divide two quaternions
 func QuaternionDivide(q1 Quaternion, q2 Quaternion) Quaternion {
-	var result = Quaternion{X: q1.X / q2.X, Y: q1.Y / q2.Y, Z: q1.Z / q2.Z, W: q1.W / q2.W}
+	result := Quaternion{X: q1.X / q2.X, Y: q1.Y / q2.Y, Z: q1.Z / q2.Z, W: q1.W / q2.W}
 
 	return result
 }
 
 // QuaternionLerp - Calculate linear interpolation between two quaternions
 func QuaternionLerp(q1 Quaternion, q2 Quaternion, amount float32) Quaternion {
-	var result = Quaternion{}
+	result := Quaternion{}
 
 	result.X = q1.X + amount*(q2.X-q1.X)
 	result.Y = q1.Y + amount*(q2.Y-q1.Y)
@@ -1495,7 +1519,7 @@ func QuaternionLerp(q1 Quaternion, q2 Quaternion, amount float32) Quaternion {
 
 // QuaternionNlerp - Calculate slerp-optimized interpolation between two quaternions
 func QuaternionNlerp(q1 Quaternion, q2 Quaternion, amount float32) Quaternion {
-	var result = Quaternion{}
+	result := Quaternion{}
 
 	// QuaternionLerp(q1, q2, amount)
 	result.X = q1.X + amount*(q2.X-q1.X)
@@ -1552,7 +1576,7 @@ func QuaternionSlerp(q1, q2 Quaternion, amount float32) Quaternion {
 
 // QuaternionFromVector3ToVector3 - Calculate quaternion based on the rotation from one vector to another
 func QuaternionFromVector3ToVector3(from Vector3, to Vector3) Quaternion {
-	var result = Quaternion{}
+	result := Quaternion{}
 
 	cos2Theta := from.X*to.X + from.Y*to.Y + from.Z*to.Z                                                       // Vector3DotProduct(from, to)
 	cross := Vector3{X: from.Y*to.Z - from.Z*to.Y, Y: from.Z*to.X - from.X*to.Z, Z: from.X*to.Y - from.Y*to.X} // Vector3CrossProduct(from, to)

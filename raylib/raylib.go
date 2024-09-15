@@ -496,6 +496,96 @@ func NewVector2(x, y float32) Vector2 {
 	return Vector2{x, y}
 }
 
+// Add - Add two vectors (v1 + v2)
+func (v1 Vector2) Add(v2 Vector2) Vector2 { return Vector2Add(v1, v2) }
+
+// AddValue - Add vector and float value
+func (v Vector2) AddValue(add float32) Vector2 { return Vector2AddValue(v, add) }
+
+// Subtract - Subtract two vectors (v1 - v2)
+func (v1 Vector2) Subtract(v2 Vector2) Vector2 { return Vector2Subtract(v1, v2) }
+
+// SubtractValue - Subtract vector by float value
+func (v Vector2) SubtractValue(sub float32) Vector2 { return Vector2SubtractValue(v, sub) }
+
+// Length - Calculate vector length
+func (v Vector2) Length() float32 { return Vector2Length(v) }
+
+// LengthSqr - Calculate vector square length
+func (v Vector2) LengthSqr() float32 { return Vector2LengthSqr(v) }
+
+// DotProduct - Calculate two vectors dot product
+func (v1 Vector2) DotProduct(v2 Vector2) float32 { return Vector2DotProduct(v1, v2) }
+
+// Distance - Calculate distance between two vectors
+func (v1 Vector2) Distance(v2 Vector2) float32 { return Vector2Distance(v1, v2) }
+
+// DistanceSqr - Calculate square distance between two vectors
+func (v1 Vector2) DistanceSqr(v2 Vector2) float32 { return Vector2DistanceSqr(v1, v2) }
+
+// Angle - Calculate angle between two vectors
+func (v1 Vector2) Angle(v2 Vector2) float32 { return Vector2Angle(v1, v2) }
+
+// LineAngle - Calculate angle defined by a two vectors line
+// NOTE: Parameters need to be normalized. Current implementation should be aligned with glm::angle
+func (start Vector2) LineAngle(end Vector2) float32 { return Vector2LineAngle(start, end) }
+
+// Scale - Scale vector (multiply by value)
+func (v Vector2) Scale(scale float32) Vector2 { return Vector2Scale(v, scale) }
+
+// Multiply - Multiply vector by vector
+func (v1 Vector2) Multiply(v2 Vector2) Vector2 { return Vector2Multiply(v1, v2) }
+
+// Negate - Negate vector
+func (v Vector2) Negate() Vector2 { return Vector2Negate(v) }
+
+// Divide - Divide vector by vector
+func (v1 Vector2) Divide(v2 Vector2) Vector2 { return Vector2Divide(v1, v2) }
+
+// Normalize - Normalize provided vector
+func (v Vector2) Normalize() Vector2 { return Vector2Normalize(v) }
+
+// Transform - Transforms a Vector2 by a given Matrix
+func (v Vector2) Transform(mat Matrix) Vector2 { return Vector2Transform(v, mat) }
+
+// Lerp - Calculate linear interpolation between two vectors
+func (v1 Vector2) Lerp(v2 Vector2, amount float32) Vector2 { return Vector2Lerp(v1, v2, amount) }
+
+// Reflect - Calculate reflected vector to normal
+func (v Vector2) Reflect(normal Vector2) Vector2 { return Vector2Reflect(v, normal) }
+
+// Min - Get min value for each pair of components
+func (v1 Vector2) Min(v2 Vector2) Vector2 { return Vector2Min(v1, v2) }
+
+// Max - Get max value for each pair of components
+func (v1 Vector2) Max(v2 Vector2) Vector2 { return Vector2Max(v1, v2) }
+
+// Rotate - Rotate vector by angle
+func (v Vector2) Rotate(angle float32) Vector2 { return Vector2Rotate(v, angle) }
+
+// MoveTowards - Move Vector towards target
+func (v Vector2) MoveTowards(target Vector2, maxDistance float32) Vector2 {
+	return Vector2MoveTowards(v, target, maxDistance)
+}
+
+// Invert - Invert the given vector
+func (v Vector2) Invert() Vector2 { return Vector2Invert(v) }
+
+// Clamp - Clamp the components of the vector between min and max values specified by the given vectors
+func (v Vector2) Clamp(min Vector2, max Vector2) Vector2 { return Vector2Clamp(v, min, max) }
+
+// ClampValue - Clamp the magnitude of the vector between two min and max values
+func (v Vector2) ClampValue(min float32, max float32) Vector2 { return Vector2ClampValue(v, min, max) }
+
+// Equals - Check whether two given vectors are almost equal
+func (v1 Vector2) Equals(v2 Vector2) bool { return Vector2Equals(v1, v2) }
+
+// CrossProduct - Calculate two vectors cross product
+func (v1 Vector2) CrossProduct(v2 Vector2) float32 { return Vector2CrossProduct(v1, v2) }
+
+// Abs - Returns the absolute value of each component
+func (v Vector2) Abs() Vector2 { return Vector2Abs(v) }
+
 // Vector3 type
 type Vector3 struct {
 	X float32
