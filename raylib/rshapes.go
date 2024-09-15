@@ -5,8 +5,10 @@ package rl
 #include <stdlib.h>
 */
 import "C"
+
 import (
 	"image/color"
+	"math"
 	"unsafe"
 )
 
@@ -509,62 +511,62 @@ func GetSplinePointBezierCubic(p1, p2, p3, p4 Vector2, t float32) Vector2 {
 
 // CheckCollisionRecs - Check collision between two rectangles
 func CheckCollisionRecs(rec1, rec2 Rectangle) bool {
-	crec1 := rec1.cptr()
-	crec2 := rec2.cptr()
-	ret := C.CheckCollisionRecs(*crec1, *crec2)
-	v := bool(ret)
-	return v
+	return ((rec1.X < (rec2.X+rec2.Width) && (rec1.X+rec1.Width) > rec2.X) &&
+		(rec1.Y < (rec2.Y+rec2.Height) && (rec1.Y+rec1.Height) > rec2.Y))
 }
 
 // CheckCollisionCircles - Check collision between two circles
 func CheckCollisionCircles(center1 Vector2, radius1 float32, center2 Vector2, radius2 float32) bool {
-	ccenter1 := center1.cptr()
-	cradius1 := (C.float)(radius1)
-	ccenter2 := center2.cptr()
-	cradius2 := (C.float)(radius2)
-	ret := C.CheckCollisionCircles(*ccenter1, cradius1, *ccenter2, cradius2)
-	v := bool(ret)
-	return v
+	dx := center2.X - center1.X
+	dy := center2.Y - center1.Y
+	return dx*dx+dy*dy <= (radius1+radius2)*(radius1+radius2)
 }
 
 // CheckCollisionCircleRec - Check collision between circle and rectangle
 func CheckCollisionCircleRec(center Vector2, radius float32, rec Rectangle) bool {
-	ccenter := center.cptr()
-	cradius := (C.float)(radius)
-	crec := rec.cptr()
-	ret := C.CheckCollisionCircleRec(*ccenter, cradius, *crec)
-	v := bool(ret)
-	return v
+	recCenterX := rec.X + rec.Width/2
+	recCenterY := rec.Y + rec.Height/2
+	dx := float32(math.Abs(float64(center.X - recCenterX)))
+	dy := float32(math.Abs(float64(center.Y - recCenterY)))
+	if dx > (rec.Width/2 + radius) {
+		return false
+	}
+	if dy > (rec.Height/2 + radius) {
+		return false
+	}
+	if dx <= (rec.Width / 2) {
+		return true
+	}
+	if dy <= (rec.Height / 2) {
+		return true
+	}
+	cornerDistanceSq := (dx-rec.Width/2)*(dx-rec.Width/2) + (dy-rec.Height/2)*(dy-rec.Height/2)
+	return cornerDistanceSq <= (radius * radius)
 }
 
 // CheckCollisionPointRec - Check if point is inside rectangle
 func CheckCollisionPointRec(point Vector2, rec Rectangle) bool {
-	cpoint := point.cptr()
-	crec := rec.cptr()
-	ret := C.CheckCollisionPointRec(*cpoint, *crec)
-	v := bool(ret)
-	return v
+	return (point.X >= rec.X) && (point.X < (rec.X + rec.Width)) && (point.Y >= rec.Y) && (point.Y < (rec.Y + rec.Height))
 }
 
 // CheckCollisionPointCircle - Check if point is inside circle
 func CheckCollisionPointCircle(point Vector2, center Vector2, radius float32) bool {
-	cpoint := point.cptr()
-	ccenter := center.cptr()
-	cradius := (C.float)(radius)
-	ret := C.CheckCollisionPointCircle(*cpoint, *ccenter, cradius)
-	v := bool(ret)
-	return v
+	dx := center.X - point.X
+	dy := center.Y - point.Y
+	return dx*dx+dy*dy <= radius*radius
 }
 
 // CheckCollisionPointTriangle - Check if point is inside a triangle
 func CheckCollisionPointTriangle(point, p1, p2, p3 Vector2) bool {
-	cpoint := point.cptr()
-	cp1 := p1.cptr()
-	cp2 := p2.cptr()
-	cp3 := p3.cptr()
-	ret := C.CheckCollisionPointTriangle(*cpoint, *cp1, *cp2, *cp3)
-	v := bool(ret)
-	return v
+	alpha := ((p2.Y-p3.Y)*(point.X-p3.X) + (p3.X-p2.X)*(point.Y-p3.Y)) /
+		((p2.Y-p3.Y)*(p1.X-p3.X) + (p3.X-p2.X)*(p1.Y-p3.Y))
+
+	beta := ((p3.Y-p1.Y)*(point.X-p3.X) + (p1.X-p3.X)*(point.Y-p3.Y)) /
+		((p2.Y-p3.Y)*(p1.X-p3.X) + (p3.X-p2.X)*(p1.Y-p3.Y))
+
+	gamma := 1.0 - alpha - beta
+
+	return (alpha > 0) && (beta > 0) && (gamma > 0)
 }
 
 // CheckCollisionPointPoly - Check if point is within a polygon described by array of vertices
@@ -604,9 +606,19 @@ func CheckCollisionPointLine(point, p1, p2 Vector2, threshold int32) bool {
 
 // GetCollisionRec - Get collision rectangle for two rectangles collision
 func GetCollisionRec(rec1, rec2 Rectangle) Rectangle {
-	crec1 := rec1.cptr()
-	crec2 := rec2.cptr()
-	ret := C.GetCollisionRec(*crec1, *crec2)
-	v := newRectangleFromPointer(unsafe.Pointer(&ret))
-	return v
+	left := float32(math.Max(float64(rec1.X), float64(rec2.X)))
+	right1 := rec1.X + rec1.Width
+	right2 := rec2.X + rec2.Width
+	right := float32(math.Min(float64(right1), float64(right2)))
+	top := float32(math.Max(float64(rec1.Y), float64(rec2.Y)))
+	bottom1 := rec1.Y + rec1.Height
+	bottom2 := rec2.Y + rec2.Height
+	bottom := float32(math.Min(float64(bottom1), float64(bottom2)))
+
+	return Rectangle{
+		X:      left,
+		Y:      top,
+		Width:  right - left,
+		Height: bottom - top,
+	}
 }
