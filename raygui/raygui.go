@@ -29,10 +29,10 @@ type GuiStyleProp struct {
 
 // Gui control state
 const (
-	STATE_NORMAL   int32 = 0
-	STATE_FOCUSED        = 1
-	STATE_PRESSED        = 2
-	STATE_DISABLED       = 3
+	STATE_NORMAL   = 0
+	STATE_FOCUSED  = 1
+	STATE_PRESSED  = 2
+	STATE_DISABLED = 3
 )
 
 // GuiState .
@@ -40,9 +40,9 @@ type GuiState = int32
 
 // Gui control text alignment
 const (
-	TEXT_ALIGN_LEFT   int32 = 0
-	TEXT_ALIGN_CENTER       = 1
-	TEXT_ALIGN_RIGHT        = 2
+	TEXT_ALIGN_LEFT   = 0
+	TEXT_ALIGN_CENTER = 1
+	TEXT_ALIGN_RIGHT  = 2
 )
 
 // GuiTextAlignment .
@@ -50,9 +50,9 @@ type GuiTextAlignment = int32
 
 // Gui control text alignment vertical
 const (
-	TEXT_ALIGN_TOP    int32 = 0
-	TEXT_ALIGN_MIDDLE       = 1
-	TEXT_ALIGN_BOTTOM       = 2
+	TEXT_ALIGN_TOP    = 0
+	TEXT_ALIGN_MIDDLE = 1
+	TEXT_ALIGN_BOTTOM = 2
 )
 
 // GuiTextWrapMode .
@@ -61,9 +61,9 @@ type GuiTextWrapMode = int32
 // Gui control text wrap mode
 // NOTE: Useful for multiline text
 const (
-	TEXT_WRAP_NONE int32 = 0
-	TEXT_WRAP_CHAR       = 1
-	TEXT_WRAP_WORD       = 2
+	TEXT_WRAP_NONE = 0
+	TEXT_WRAP_CHAR = 1
+	TEXT_WRAP_WORD = 2
 )
 
 // GuiTextAlignmentVertical .
@@ -71,22 +71,22 @@ type GuiTextAlignmentVertical = int32
 
 // DEFAULT - Gui controls
 const (
-	DEFAULT     int32 = 0
-	LABEL             = 1
-	BUTTON            = 2
-	TOGGLE            = 3
-	SLIDER            = 4
-	PROGRESSBAR       = 5
-	CHECKBOX          = 6
-	COMBOBOX          = 7
-	DROPDOWNBOX       = 8
-	TEXTBOX           = 9
-	VALUEBOX          = 10
-	SPINNER           = 11
-	LISTVIEW          = 12
-	COLORPICKER       = 13
-	SCROLLBAR         = 14
-	STATUSBAR         = 15
+	DEFAULT     = 0
+	LABEL       = 1
+	BUTTON      = 2
+	TOGGLE      = 3
+	SLIDER      = 4
+	PROGRESSBAR = 5
+	CHECKBOX    = 6
+	COMBOBOX    = 7
+	DROPDOWNBOX = 8
+	TEXTBOX     = 9
+	VALUEBOX    = 10
+	SPINNER     = 11
+	LISTVIEW    = 12
+	COLORPICKER = 13
+	SCROLLBAR   = 14
+	STATUSBAR   = 15
 )
 
 // GuiControl .
@@ -95,21 +95,21 @@ type GuiControl = int32
 // Gui base properties for every control
 // NOTE: RAYGUI_MAX_PROPS_BASE properties (by default 16 properties)
 const (
-	BORDER_COLOR_NORMAL   int32 = 0
-	BASE_COLOR_NORMAL           = 1
-	TEXT_COLOR_NORMAL           = 2
-	BORDER_COLOR_FOCUSED        = 3
-	BASE_COLOR_FOCUSED          = 4
-	TEXT_COLOR_FOCUSED          = 5
-	BORDER_COLOR_PRESSED        = 6
-	BASE_COLOR_PRESSED          = 7
-	TEXT_COLOR_PRESSED          = 8
-	BORDER_COLOR_DISABLED       = 9
-	BASE_COLOR_DISABLED         = 10
-	TEXT_COLOR_DISABLED         = 11
-	BORDER_WIDTH                = 12
-	TEXT_PADDING                = 13
-	TEXT_ALIGNMENT              = 14
+	BORDER_COLOR_NORMAL   = 0
+	BASE_COLOR_NORMAL     = 1
+	TEXT_COLOR_NORMAL     = 2
+	BORDER_COLOR_FOCUSED  = 3
+	BASE_COLOR_FOCUSED    = 4
+	TEXT_COLOR_FOCUSED    = 5
+	BORDER_COLOR_PRESSED  = 6
+	BASE_COLOR_PRESSED    = 7
+	TEXT_COLOR_PRESSED    = 8
+	BORDER_COLOR_DISABLED = 9
+	BASE_COLOR_DISABLED   = 10
+	TEXT_COLOR_DISABLED   = 11
+	BORDER_WIDTH          = 12
+	TEXT_PADDING          = 13
+	TEXT_ALIGNMENT        = 14
 )
 
 // GuiControlProperty .
@@ -118,13 +118,13 @@ type GuiControlProperty = int32
 // DEFAULT extended properties
 // NOTE: Those properties are common to all controls or global
 const (
-	TEXT_SIZE               int32 = 16
-	TEXT_SPACING                  = 17
-	LINE_COLOR                    = 18
-	BACKGROUND_COLOR              = 19
-	TEXT_LINE_SPACING             = 20
-	TEXT_ALIGNMENT_VERTICAL       = 21
-	TEXT_WRAP_MODE                = 22
+	TEXT_SIZE               = 16
+	TEXT_SPACING            = 17
+	LINE_COLOR              = 18
+	BACKGROUND_COLOR        = 19
+	TEXT_LINE_SPACING       = 20
+	TEXT_ALIGNMENT_VERTICAL = 21
+	TEXT_WRAP_MODE          = 22
 )
 
 // GuiDefaultProperty .
@@ -132,7 +132,7 @@ type GuiDefaultProperty = int32
 
 // GROUP_PADDING .
 const (
-	GROUP_PADDING int32 = 16
+	GROUP_PADDING = 16
 )
 
 // GuiToggleProperty .
@@ -140,7 +140,7 @@ type GuiToggleProperty = int32
 
 const (
 	// Slider size of internal bar
-	SLIDER_WIDTH int32 = 16
+	SLIDER_WIDTH = 16
 	// Slider/SliderBar internal bar padding
 	SLIDER_PADDING = 17
 )
@@ -150,26 +150,26 @@ type GuiSliderProperty = int32
 
 const (
 	// ProgressBar internal padding
-	PROGRESS_PADDING int32 = 16
+	PROGRESS_PADDING = 16
 )
 
 // GuiProgressBarProperty .
 type GuiProgressBarProperty = int32
 
 const (
-	ARROWS_SIZE           int32 = 16
-	ARROWS_VISIBLE              = 17
-	SCROLL_SLIDER_PADDING       = 18
-	SCROLL_SLIDER_SIZE          = 19
-	SCROLL_PADDING              = 20
-	SCROLL_SPEED                = 21
+	ARROWS_SIZE           = 16
+	ARROWS_VISIBLE        = 17
+	SCROLL_SLIDER_PADDING = 18
+	SCROLL_SLIDER_SIZE    = 19
+	SCROLL_PADDING        = 20
+	SCROLL_SPEED          = 21
 )
 
 // GuiScrollBarProperty .
 type GuiScrollBarProperty = int32
 
 const (
-	CHECK_PADDING int32 = 16
+	CHECK_PADDING = 16
 )
 
 // GuiCheckBoxProperty .
@@ -177,7 +177,7 @@ type GuiCheckBoxProperty = int32
 
 const (
 	// ComboBox right button width
-	COMBO_BUTTON_WIDTH int32 = 16
+	COMBO_BUTTON_WIDTH = 16
 	// ComboBox button separation
 	COMBO_BUTTON_SPACING = 17
 )
@@ -187,7 +187,7 @@ type GuiComboBoxProperty = int32
 
 const (
 	// DropdownBox arrow separation from border and items
-	ARROW_PADDING int32 = 16
+	ARROW_PADDING = 16
 	// DropdownBox items separation
 	DROPDOWN_ITEMS_SPACING = 17
 )
@@ -197,7 +197,7 @@ type GuiDropdownBoxProperty = int32
 
 const (
 	// TextBox/TextBoxMulti/ValueBox/Spinner inner text padding
-	TEXT_INNER_PADDING int32 = 16
+	TEXT_INNER_PADDING = 16
 	// TextBoxMulti lines separation
 	TEXT_LINES_SPACING = 17
 )
@@ -207,7 +207,7 @@ type GuiTextBoxProperty = int32
 
 const (
 	// Spinner left/right buttons width
-	SPIN_BUTTON_WIDTH int32 = 16
+	SPIN_BUTTON_WIDTH = 16
 	// Spinner buttons separation
 	SPIN_BUTTON_SPACING = 17
 )
@@ -217,7 +217,7 @@ type GuiSpinnerProperty = int32
 
 const (
 	// ListView items height
-	LIST_ITEMS_HEIGHT int32 = 16
+	LIST_ITEMS_HEIGHT = 16
 	// ListView items separation
 	LIST_ITEMS_SPACING = 17
 	// ListView scrollbar size (usually width)
@@ -230,7 +230,7 @@ const (
 type GuiListViewProperty = int32
 
 const (
-	COLOR_SELECTOR_SIZE int32 = 16
+	COLOR_SELECTOR_SIZE = 16
 	// rl.ColorPicker right hue bar width
 	HUEBAR_WIDTH = 17
 	// rl.ColorPicker right hue bar separation from panel
@@ -1393,4 +1393,21 @@ func LoadIcons(fileName string, loadIconsName bool) {
 // DrawIcon - draw icon using pixel size at specified position
 func DrawIcon(iconId, posX, posY, pixelSize int32, col color.RGBA) {
 	C.GuiDrawIcon(C.int(iconId), C.int(posX), C.int(posY), C.int(pixelSize), *(*C.Color)(unsafe.Pointer(&col)))
+}
+
+// Enable gui tooltips (global state)
+func EnableTooltip() {
+	C.GuiEnableTooltip()
+}
+
+// Disable gui tooltips (global state)
+func DisableTooltip() {
+	C.GuiDisableTooltip()
+}
+
+// Set tooltip string
+func SetTooltip(tooltip string) {
+	ctooltip := C.CString(tooltip)
+	defer C.free(unsafe.Pointer(ctooltip))
+	C.GuiSetTooltip(ctooltip)
 }
